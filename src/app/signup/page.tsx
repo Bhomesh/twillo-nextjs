@@ -9,22 +9,25 @@ export default function SignupPage() {
   const router = useRouter();
 
   const [user, setUser] = useState({
+    username: '',
     email: '',
     password: '',
-    username: '',
   });
 
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
-  const onSignup = async () => {
+  const onSignup = async () => { 
     try {
       setLoading(true);
+      console.log('Signing up', user);
       const response = await axios.post('/api/users/signup', user);
-      console.log('signup successful', response.data);
+      console.log('Signup successful', response.data);
+      toast.success('Signup Successful', response.data.message);
       router.push('/login');
-    } catch (error: any) {
+    } catch (error) {
+      console.log('Signup failed', error.message);
       toast.error(error.message);
     } finally {
       setLoading(false);
@@ -49,28 +52,40 @@ export default function SignupPage() {
         {loading ? 'Processing' : 'Sign Up'}
       </h1>
       <hr />
-      <label htmlFor='username'>Username</label>
+      <label
+        className='p-2'
+        htmlFor='username'>
+        Username
+      </label>
       <input
-        className='text-black text'
+        className=' text-black text p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600'
         type='text'
         id='username'
         value={user.username}
         onChange={(e) => setUser({ ...user, username: e.target.value })}
         placeholder='Username'
       />
-      <label htmlFor='email'>Email</label>
+      <label
+        className='p-2'
+        htmlFor='email'>
+        Email
+      </label>
       <input
-        className='text-black text'
+        className=' text-black text p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600'
         type='text'
         id='email'
         value={user.email}
         onChange={(e) => setUser({ ...user, email: e.target.value })}
         placeholder='Email'
       />
-      <label htmlFor='password'>Password</label>
+      <label
+        className='p-2'
+        htmlFor='password'>
+        Password
+      </label>
       <input
-        className='text-black text'
-        type='text'
+        className=' text-black text p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600'
+        type='password'
         id='password'
         value={user.password}
         onChange={(e) => setUser({ ...user, password: e.target.value })}
