@@ -5,14 +5,7 @@ import bcryptjs from "bcryptjs";
 export const sendEmail = async ({ email, emailType, userId }: any) => {
   try {
     const hashedToken = await bcryptjs.hash(userId.toString(), 10);
-    await User.findByIdAndUpdate(
-      userId,
-      {
-        verifyToken: hashedToken,
-        verifyTokenExpire: Date.now() + 60 * 60 * 1000,
-      },
-      { new: true, runValidators: true }
-    );
+
     if (emailType === "VERIFY") {
       await User.findByIdAndUpdate({
         verifyToken: hashedToken,
@@ -26,7 +19,7 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
     }
     var transporter = nodemailer.createTransport({
       host: "SMTP_HOST",
-      port: "SMTP_PORT",
+      port: 2525,
       auth: {
         user: "SMTP_USER",
         pass: "SMTP_PASS",
@@ -34,7 +27,7 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
     });
 
     const mailOptions = {
-      from: "bhomeshrazdan.work@gmail.com",
+      from: "test@gmail.com",
       to: email,
       subject:
         emailType === "VERIFY" ? "Verify your email" : "Reset your password",
